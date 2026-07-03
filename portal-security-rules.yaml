@@ -1,0 +1,64 @@
+rules:
+  - id: python.flask.security.audit.render-template-string.render-template-string
+    languages: [python]
+    severity: WARNING
+    message: >
+      Found a Flask render_template_string call with user-influenced input.
+      Passing untrusted data to render_template_string allows Server-Side
+      Template Injection (SSTI), which can lead to remote code execution.
+      Use render_template with a static template file and pass data as
+      context variables instead.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code (Code Injection)"
+      owasp: "A03:2021 - Injection"
+      asvs: "V5.2.5 Template Injection"
+      category: security
+    patterns:
+      - pattern: render_template_string(...)
+
+  - id: python.flask.security.audit.debug-enabled.debug-enabled
+    languages: [python]
+    severity: WARNING
+    message: >
+      Flask app run with debug=True. The Werkzeug debugger exposes an
+      interactive console and stack traces to anyone who can reach the app,
+      leaking internal information and allowing code execution. Disable debug
+      mode in any non-local environment.
+    metadata:
+      cwe: "CWE-489: Active Debug Code"
+      owasp: "A05:2021 - Security Misconfiguration"
+      asvs: "V14.3.2 Debug Disabled"
+      category: security
+    patterns:
+      - pattern: app.run(..., debug=True, ...)
+
+  - id: python.flask.security.audit.hardcoded-secret-default.hardcoded-secret
+    languages: [python]
+    severity: INFO
+    message: >
+      A default/hardcoded fallback value is used for SECRET_KEY. If the
+      environment variable is unset, a predictable key is used, weakening
+      session signing. Ensure a strong random key is always supplied from
+      configuration and fail closed if it is missing.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      owasp: "A07:2021 - Identification and Authentication Failures"
+      asvs: "V3.5 Token-based Session Management"
+      category: security
+    patterns:
+      - pattern: os.environ.get("SECRET_KEY", "...")
+
+  - id: python.flask.security.audit.string-concat-html.raw-html-build
+    languages: [python]
+    severity: INFO
+    message: >
+      HTML is being assembled by string concatenation with a variable. If the
+      variable is user-controlled this can introduce Cross-Site Scripting (XSS)
+      or template injection. Prefer Jinja2 auto-escaping via template files.
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting (XSS)"
+      owasp: "A03:2021 - Injection"
+      asvs: "V5.3.3 Output Encoding"
+      category: security
+    patterns:
+      - pattern: '"<h3>Hello " + $X + ...'

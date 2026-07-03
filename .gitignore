@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+uploads/
+uploads_secure/
+semgrep-results.json
+semgrep-results.txt
+portal.db
+audit.log

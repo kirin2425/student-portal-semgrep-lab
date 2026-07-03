@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block body %}
+<h2>Welcome, {{ user }} <small>({{ role }})</small></h2>
+<nav>
+  {% if role == 'student' %}<a href="/upload">Upload Assignment</a>{% endif %}
+  <a href="/messages">Messages</a>
+  <a href="/profile">Profile</a>
+  <a href="/logout">Logout</a>
+</nav>
+{% endblock %}

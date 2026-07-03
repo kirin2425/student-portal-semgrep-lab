@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block body %}
+<h2>1.4 Profile Update</h2>
+<form method="post">
+  <input name="email" placeholder="Email" value="{{ profile.email or '' }}"><br>
+  <input name="phone" placeholder="Phone" value="{{ profile.phone or '' }}"><br>
+  <button type="submit">Save</button>
+</form>
+<p><a href="/">Back</a></p>
+{% endblock %}
